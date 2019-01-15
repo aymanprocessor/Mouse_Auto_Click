@@ -13,7 +13,7 @@ namespace Mouse_AutoClick
         {
             InitializeComponent();
         }
-        private Thread th;
+        
         private bool flag;
         private Point p;
         private void Form1_Load(object sender, EventArgs e)
@@ -24,51 +24,43 @@ namespace Mouse_AutoClick
 
             TopMost = true;
             flag = false;
-            var timer = new System.Threading.Timer(
-                x =>
-                {
-                    label1.Invoke((MethodInvoker)(() => label1.Text = "X = " + Cursor.Position.X + "  Y = " + Cursor.Position.Y));
+           // var th = new System.Threading.Timer(_ => ss(),null,TimeSpan.Zero,TimeSpan.FromMilliseconds(1000));
+            
 
-
-                    //CURSORINFO pci;
-                    //pci.cbSize = Marshal.SizeOf(typeof(CURSORINFO));
-                    //GetCursorInfo(out pci);
-
-                    //label3.Invoke((MethodInvoker)(() => label3.Text = pci.hCursor.ToString()));
-
-
-
-                    var timer1 = new System.Threading.Timer(
-                        zx =>
-                        {
-                            if (flag)
-                            {
-
-                                SetCursorPos(p.X, p.Y);
-
-                                if (IsHandCursor())
-                                {
-                                    Thread.Sleep(1500);
-                                    clicker(Cursor.Position.X, Cursor.Position.Y);
-                                }
-                            }
-
-                        },
-                        null,
-                        TimeSpan.Zero,
-                        TimeSpan.FromMilliseconds(100));
-
-
-
-
-
-                },
-                null,
-                TimeSpan.Zero,
-                TimeSpan.FromMilliseconds(100));
 
         }
 
+        private void ss()
+        {
+            label1.Invoke((MethodInvoker)(() => label1.Text = "X = " + Cursor.Position.X + "  Y = " + Cursor.Position.Y));
+
+
+            //CURSORINFO pci;
+            //pci.cbSize = Marshal.SizeOf(typeof(CURSORINFO));
+            //GetCursorInfo(out pci);
+
+            //label3.Invoke((MethodInvoker)(() => label3.Text = pci.hCursor.ToString()));
+
+
+
+            if (flag)
+            {
+
+                SetCursorPos(p.X, p.Y);
+                SetCursorPos(p.X + 2, p.Y+2);
+                SetCursorPos(p.X, p.Y);
+                if (IsHandCursor())
+                {
+                    Thread.Sleep(500);
+                    clicker(Cursor.Position.X, Cursor.Position.Y);
+
+                }
+            }
+
+
+
+
+        }
 
         public struct POINT
         {
@@ -137,10 +129,10 @@ namespace Mouse_AutoClick
         public void clicker(int x, int y)
         {
 
-            this.Refresh();
-            Application.DoEvents();
-            mouse_event(MOUSEEVENTF_LEFTDOWN, x, y, 0, 0);
-            mouse_event(MOUSEEVENTF_LEFTUP, x, y, 0, 0);
+
+            
+            mouse_event(MOUSEEVENTF_LEFTDOWN | MOUSEEVENTF_LEFTUP, x, y, 0, 0);
+            Thread.Sleep(100);
         }
 
         private bool IsWaitCursor()
@@ -267,6 +259,11 @@ namespace Mouse_AutoClick
             }
 
 
+        }
+
+        private void timer2_Tick(object sender, EventArgs e)
+        {
+            ss();
         }
     }
 }
